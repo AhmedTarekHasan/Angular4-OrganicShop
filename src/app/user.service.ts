@@ -3,9 +3,10 @@ import { AngularFireDatabase, AngularFireObject } from 'angularfire2/database';
 import * as firebase from 'firebase';
 import { AppUser } from './models/app-user';
 import { Observable } from 'rxjs/Observable';
+import { IUserService } from './models/abstractions/user-service';
 
 @Injectable()
-export class UserService {
+export class UserService implements IUserService {
 
   constructor(private db: AngularFireDatabase) { }
 

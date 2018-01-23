@@ -6,6 +6,7 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { BsNavbarComponent } from './bs-navbar/bs-navbar.component';
@@ -22,6 +23,9 @@ import { AuthService } from './auth.service';
 import { AuthGuardService } from './auth-guard.service';
 import { UserService } from './user.service';
 import { AdminAuthGuardService } from './admin-auth-guard.service';
+import { ProductFormComponent } from './admin/product-form/product-form.component';
+import { CategoryService } from './category.service';
+import { ProductService } from './product.service';
 
 @NgModule({
   declarations: [
@@ -35,10 +39,13 @@ import { AdminAuthGuardService } from './admin-auth-guard.service';
     MyOrdersComponent,
     AdminProductsComponent,
     AdminOrdersComponent,
-    LoginComponent
+    LoginComponent,
+    ProductFormComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
@@ -82,13 +89,24 @@ import { AdminAuthGuardService } from './admin-auth-guard.service';
         canActivate: [ AuthGuardService, AdminAuthGuardService ]
       },
       {
+        path: 'admin/products/new',
+        component: ProductFormComponent,
+        canActivate: [ AuthGuardService, AdminAuthGuardService ]
+      },
+      {
         path: 'admin/orders',
         component: AdminOrdersComponent,
         canActivate: [ AuthGuardService, AdminAuthGuardService ]
       }
     ])
   ],
-  providers: [AuthService, AuthGuardService, AdminAuthGuardService, UserService],
+  providers: [
+    AuthService,
+    AuthGuardService,
+    AdminAuthGuardService,
+    UserService,
+    CategoryService,
+    ProductService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

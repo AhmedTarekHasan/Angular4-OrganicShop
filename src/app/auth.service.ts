@@ -7,9 +7,10 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 import * as firebase from 'firebase';
+import { IAuthService } from './models/abstractions/auth-service';
 
 @Injectable()
-export class AuthService {
+export class AuthService implements IAuthService {
   public user$: Observable<firebase.User>;
 
   constructor(private userService: UserService, private afAuth: AngularFireAuth, private route: ActivatedRoute) {
