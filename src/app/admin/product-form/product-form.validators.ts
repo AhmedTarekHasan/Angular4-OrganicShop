@@ -6,24 +6,6 @@ import { IProductService } from "../../models/abstractions/product-service";
 export class ProductFormValidators {
     constructor (private productService: IProductService) {
     }
-    
-    public required(fieldName: string): ValidatorFn {
-        let validationFn: ValidatorFn = (c: AbstractControl): ValidationErrors | null => {
-            let result = null;
-
-            if(Validators.required(c)) {
-                result = {
-                    'required': {
-                        message: fieldName + ' is required'
-                    }
-                };
-            }
-
-            return result;
-        };
-
-        return validationFn;
-    }
 
     public titleIsUnique(): AsyncValidatorFn {
         let validationFn: AsyncValidatorFn = (c: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {

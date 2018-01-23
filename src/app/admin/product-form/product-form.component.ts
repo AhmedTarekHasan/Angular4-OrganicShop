@@ -8,6 +8,8 @@ import { ProductService } from '../../product.service';
 import { Product } from '../../models/product';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ProductFormValidators } from './product-form.validators';
+import * as utilities from '../../../app/shared/utilities';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-form',
@@ -17,19 +19,21 @@ import { ProductFormValidators } from './product-form.validators';
 export class ProductFormComponent implements OnInit, OnDestroy {
   private categoriesSubscription: Subscription;
 
-  public categories: Category[];
-
-  constructor(private categoryService: CategoryService, private productService: ProductService) {
+  constructor(private categoryService: CategoryService,
+    private productService: ProductService,
+    private router: Router) {
     this.categoriesSubscription = this.categoryService.getCategories().subscribe((categories: Category[]) => {
       this.categories = categories;
     });
   }
 
-  form: FormGroup = new FormGroup({
+  public categories: Category[];
+
+  public form: FormGroup = new FormGroup({
     'title': new FormControl(
       '',
       [
-        this.productFormValidators.required('Title')
+        utilities.CustomValidators.required('Title')
       ],
       [
         this.productFormValidators.titleIsUnique()
@@ -38,7 +42,8 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     'price': new FormControl(
       '',
       [
-        this.productFormValidators.required('Price')
+        utilities.CustomValidators.required('Price'),
+        utilities.CustomValidators.maxValueExclusive('Price', 0)
       ],
       [
 
@@ -47,7 +52,7 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     'category': new FormControl(
       '',
       [
-        this.productFormValidators.required('Category')
+        utilities.CustomValidators.required('Category')
       ],
       [
 
@@ -56,7 +61,8 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     'imageUrl': new FormControl(
       '',
       [
-        this.productFormValidators.required('Image Url')
+        utilities.CustomValidators.required('Image Url'),
+        utilities.CustomValidators.url('Image Url')
       ],
       [
 
@@ -96,13 +102,16 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     return this.getErrors(this.imageUrl);
   }
 
-  save() {
-    if(this.form.valid)
-    this.productService.create(this.form.value);
-  }
-
   get productFormValidators(): ProductFormValidators {
     return new ProductFormValidators(this.productService);
+  }
+
+  public save() {
+    if(this.form.valid) {
+      this.productService.create(this.form.value).then(value => {
+        this.router.navigate(['/admin/products']);
+      });
+    }
   }
 
   private getErrors(parentObj: any) {
@@ -116,7 +125,6 @@ export class ProductFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
   }
 
   ngOnDestroy() {
