@@ -26,6 +26,10 @@ import { AdminAuthGuardService } from './admin-auth-guard.service';
 import { ProductFormComponent } from './admin/product-form/product-form.component';
 import { CategoryService } from './category.service';
 import { ProductService } from './product.service';
+import { IProductService } from './models/abstractions/product-service';
+import { ICategoryService } from './models/abstractions/category-service';
+import { IUserService } from './models/abstractions/user-service';
+import { IAuthService } from './models/abstractions/auth-service';
 
 @NgModule({
   declarations: [
@@ -50,7 +54,7 @@ import { ProductService } from './product.service';
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     NgbModule.forRoot(),
-    RouterModule.forRoot(/*routes: Routes, config?: ExtraOptions*/
+    RouterModule.forRoot(
     [
       {
         path: '',
@@ -84,13 +88,18 @@ import { ProductService } from './product.service';
         canActivate: [ AuthGuardService ]
       },
       {
-        path: 'admin/products',
-        component: AdminProductsComponent,
+        path: 'admin/products/new',
+        component: ProductFormComponent,
         canActivate: [ AuthGuardService, AdminAuthGuardService ]
       },
       {
-        path: 'admin/products/new',
+        path: 'admin/products/:id',
         component: ProductFormComponent,
+        canActivate: [ AuthGuardService, AdminAuthGuardService ]
+      },
+      {
+        path: 'admin/products',
+        component: AdminProductsComponent,
         canActivate: [ AuthGuardService, AdminAuthGuardService ]
       },
       {
@@ -101,12 +110,13 @@ import { ProductService } from './product.service';
     ])
   ],
   providers: [
-    AuthService,
     AuthGuardService,
     AdminAuthGuardService,
-    UserService,
-    CategoryService,
-    ProductService],
+    { provide: IAuthService, useClass: AuthService },
+    { provide: IProductService, useClass: ProductService },
+    { provide: ICategoryService, useClass: CategoryService },
+    { provide: IUserService, useClass: UserService }
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

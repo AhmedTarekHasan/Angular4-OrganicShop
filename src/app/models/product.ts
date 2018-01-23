@@ -1,8 +1,7 @@
-import { Category } from "./category";
-
 export interface Product {
+    id: string;
     title: string;
-    prive: number;
+    price: number;
     categoryId: string;
     imageUrl: string;
 }

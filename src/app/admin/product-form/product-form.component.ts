@@ -1,33 +1,49 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CategoryService } from '../../category.service';
 import { Category } from '../../models/category';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/switchMap';
-import { ProductService } from '../../product.service';
+import 'rxjs/add/operator/take';
 import { Product } from '../../models/product';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ProductFormValidators } from './product-form.validators';
 import * as utilities from '../../../app/shared/utilities';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { IProductService } from '../../models/abstractions/product-service';
+import { ICategoryService } from '../../models/abstractions/category-service';
+import { DisplayMode } from '../../models/display-mode';
 
 @Component({
   selector: 'app-product-form',
   templateUrl: './product-form.component.html',
   styleUrls: ['./product-form.component.css']
 })
-export class ProductFormComponent implements OnInit, OnDestroy {
+export class ProductFormComponent implements OnInit, OnDestroy {  
   private categoriesSubscription: Subscription;
+  private productSubscription: Subscription;
+  private displayMode: DisplayMode = DisplayMode.Add;
 
-  constructor(private categoryService: CategoryService,
-    private productService: ProductService,
-    private router: Router) {
-    this.categoriesSubscription = this.categoryService.getCategories().subscribe((categories: Category[]) => {
+  constructor(private productService: IProductService,
+    private categoryService: ICategoryService,
+    private router: Router,
+    private route: ActivatedRoute) {
+    this.categoriesSubscription = this.categoryService.getCategories().take(1).subscribe((categories: Category[]) => {
       this.categories = categories;
     });
+
+    let productId = this.route.snapshot.paramMap.get('id');
+debugger;
+    if(productId) {
+      this.displayMode = DisplayMode.Edit;
+
+      this.productSubscription = this.productService.get(productId).take(1).subscribe(prod => {
+        this.productToEdit = prod;
+      });
+    }
   }
 
   public categories: Category[];
+  public productToEdit: Product;
 
   public form: FormGroup = new FormGroup({
     'title': new FormControl(
@@ -129,6 +145,7 @@ export class ProductFormComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.categoriesSubscription.unsubscribe();
+    this.productSubscription.unsubscribe();
   }
 
 }

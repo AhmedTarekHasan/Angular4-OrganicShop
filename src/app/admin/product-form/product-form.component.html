@@ -3,7 +3,12 @@
     <form [formGroup]="form">
       <div class="form-group">
         <label for="title">Title</label>
-        <input formControlName="title" id="title" type="text" class="form-control">
+        <input
+          [(ngModel)]="productToEdit.title"
+          formControlName="title"
+          id="title"
+          type="text"
+          class="form-control">
         <div class="alert alert-danger" *ngIf="title.touched && title.invalid">
           <ng-container *ngFor="let err of titleErrors">{{ err.message }}<br/></ng-container>
         </div>
@@ -12,7 +17,12 @@
         <label for="price">Price</label>
         <div class="input-group">
           <span class="input-group-addon">$</span>
-          <input formControlName="price" id="price" type="number" class="form-control">
+          <input
+          [(ngModel)]="productToEdit.price"
+            formControlName="price"
+            id="price"
+            type="number"
+            class="form-control">
         </div>
         <div class="alert alert-danger" *ngIf="price.touched && price.invalid">
           <ng-container *ngFor="let err of priceErrors">{{ err.message }}<br/></ng-container>
@@ -20,7 +30,11 @@
       </div>
       <div class="form-group">
         <label for="category">Category</label>
-        <select formControlName="category" id="category" class="form-control">
+        <select
+          [(ngModel)]="productToEdit.categoryId"
+          formControlName="category"
+          id="category"
+          class="form-control">
           <option *ngFor="let category of categories" [value]="category.id">
               {{ category.name }}
           </option>
@@ -31,7 +45,12 @@
       </div>
       <div class="form-group">
         <label for="imageUrl">Image Url</label>
-        <input formControlName="imageUrl" id="imageUrl" type="text" class="form-control">
+        <input
+          [(ngModel)]="productToEdit.imageUrl"
+          formControlName="imageUrl"
+          id="imageUrl"
+          type="text"
+          class="form-control">
         <div class="alert alert-danger" *ngIf="imageUrl.touched && imageUrl.invalid">
           <ng-container *ngFor="let err of imageUrlErrors">{{ err.message }}<br/></ng-container>
         </div>

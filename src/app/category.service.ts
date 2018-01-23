@@ -8,9 +8,9 @@ import 'rxjs/add/operator/switchMap';
 import { ICategoryService } from './models/abstractions/category-service';
 
 @Injectable()
-export class CategoryService implements ICategoryService {
+export class CategoryService extends ICategoryService {
 
-  constructor(private db: AngularFireDatabase) { }
+  constructor(private db: AngularFireDatabase) { super(); }
 
   getCategories(): Observable<Category[]> {
     return this.db.list("/categories").valueChanges().map(categories => {

@@ -1,6 +1,9 @@
 import { Product } from "../product";
+import { Observable } from "rxjs/Observable";
 
-export interface IProductService {
-    create(product: Product);
-    checkTitleIsUnique(title: string): boolean;
+export abstract class IProductService {
+    abstract create(product: Product);
+    abstract checkTitleIsUnique(title: string): boolean;
+    abstract getAll(): Observable<Product[]>;
+    abstract get(id: string): Observable<Product>;
 }

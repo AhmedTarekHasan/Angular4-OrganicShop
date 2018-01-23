@@ -6,9 +6,9 @@ import { Observable } from 'rxjs/Observable';
 import { IUserService } from './models/abstractions/user-service';
 
 @Injectable()
-export class UserService implements IUserService {
+export class UserService extends IUserService {
 
-  constructor(private db: AngularFireDatabase) { }
+  constructor(private db: AngularFireDatabase) { super(); }
 
   save(user: firebase.User) {
     this.db.object('/users/' + user.uid).update({

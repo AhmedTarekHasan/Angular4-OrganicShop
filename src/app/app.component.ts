@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
-import { UserService } from './user.service';
+import { IAuthService } from './models/abstractions/auth-service';
+import { IUserService } from './models/abstractions/user-service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +11,9 @@ import { UserService } from './user.service';
 export class AppComponent {
   title = 'app';
 
-  constructor(private userService: UserService, private auth: AuthService, private router: Router) {
+  constructor(private userService: IUserService,
+    private auth: IAuthService,
+    private router: Router) {
     auth.user$.subscribe(user => {
       if(user) {
         userService.save(user);

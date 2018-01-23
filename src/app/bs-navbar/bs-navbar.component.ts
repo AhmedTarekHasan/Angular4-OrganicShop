@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AuthService } from '../auth.service';
 import { Subscription } from 'rxjs/Subscription';
 import { AppUser } from '../models/app-user';
+import { IAuthService } from '../models/abstractions/auth-service';
 
 @Component({
   selector: 'bs-navbar',
@@ -13,7 +13,7 @@ export class BsNavbarComponent implements OnDestroy {
   
   public appUser: AppUser;
 
-  constructor(public auth: AuthService) {
+  constructor(public auth: IAuthService) {
     this.appUserSubscription = this.auth.appUser$.subscribe(appUser => {
       this.appUser = appUser;
     });

@@ -1,9 +1,9 @@
 import { Observable } from "rxjs/Observable";
 import { AppUser } from "../app-user";
 
-export interface IAuthService {
+export abstract class IAuthService {
     user$: Observable<firebase.User>;
-    login(): void;
-    logout(): void;
+    abstract login(): void;
+    abstract logout(): void;
     readonly appUser$: Observable<AppUser>;
 }

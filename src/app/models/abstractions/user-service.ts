@@ -1,7 +1,7 @@
 import { Observable } from "rxjs/Observable";
 
-export interface IUserService {
-    save(user: firebase.User);
-    get(uid: string): Observable<any>
-    isAdmin(uid: string): Observable<boolean>
+export abstract class IUserService {
+    abstract save(user: firebase.User);
+    abstract get(uid: string): Observable<any>
+    abstract isAdmin(uid: string): Observable<boolean>
 }
