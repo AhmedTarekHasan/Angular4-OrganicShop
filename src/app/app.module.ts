@@ -62,7 +62,7 @@ import { IAuthService } from './models/abstractions/auth-service';
     [
       {
         path: '',
-        component: HomeComponent
+        component: ProductsComponent
       },
       {
         path: 'login',

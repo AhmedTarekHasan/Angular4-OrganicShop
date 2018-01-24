@@ -12,7 +12,7 @@ export class CategoryService extends ICategoryService {
 
   constructor(private db: AngularFireDatabase) { super(); }
 
-  getCategories(): Observable<Category[]> {
+  getAll(): Observable<Category[]> {
     return this.db.list("/categories").valueChanges().map(categories => {
       let results: Category[] = [];
 

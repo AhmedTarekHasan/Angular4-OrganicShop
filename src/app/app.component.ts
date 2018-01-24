@@ -27,7 +27,7 @@ export class AppComponent {
           router.navigate(['/']);
         }
       } else {
-        router.navigate(['/']);
+        router.navigate(['/login']);
       }
     });
   }

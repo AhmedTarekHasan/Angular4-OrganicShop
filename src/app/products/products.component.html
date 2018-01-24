@@ -1,3 +1,40 @@
-<p>
-  products works!
-</p>
+<div class="row">
+  <div class="col-3">
+    <div class="list-group">
+      <a
+        routerLink="/"
+        [queryParams]=" { category: null }"
+        class="list-group-item list-group-item-action"
+        [class.active]="!selectedCategory">
+        All Categories
+      </a>
+      <a
+        *ngFor="let category of categories"
+        routerLink="/"
+        [queryParams]=" { category: category.id }"
+        class="list-group-item list-group-item-action"
+        [class.active]="category === selectedCategory">
+        {{ category.name }}
+      </a>
+    </div>
+  </div>
+  <div class="col">
+    <div class="row">
+      <ng-container *ngFor="let product of filteredProducts; let i = index; let o = odd">
+        <div class="col">
+          <div class="card" style="width: 18rem;">
+            <img class="card-img-top" width="100" height="200" [src]="product.imageUrl" *ngIf="product.imageUrl">
+            <div class="card-body">
+              <h5 class="card-title">{{ product.title }}</h5>
+              <p class="card-text">{{ product.price | currency:'USD':true }}</p>
+              <a href="javascript:void(0);" class="btn btn-primary">Add to Cart</a>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="o" class="w-100"></div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+

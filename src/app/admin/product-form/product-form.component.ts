@@ -27,7 +27,7 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     private categoryService: ICategoryService,
     private router: Router,
     private route: ActivatedRoute) {
-    this.categoriesSubscription = this.categoryService.getCategories().take(1).subscribe((categories: Category[]) => {
+    this.categoriesSubscription = this.categoryService.getAll().take(1).subscribe((categories: Category[]) => {
       this.categories = categories;
     });
 

@@ -72,7 +72,7 @@
     </form>
   </div>
   <div class="col-md-6">
-    <div class="card" style="width: 18rem;">
+    <div *ngIf="form.touched || form.dirty || !form.pristine" class="card" style="width: 18rem;">
       <img class="card-img-top" [src]="productToEdit.imageUrl" *ngIf="productToEdit.imageUrl">
       <div class="card-body">
         <h5 class="card-title">{{ productToEdit.title }}</h5>

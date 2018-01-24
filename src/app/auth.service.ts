@@ -20,15 +20,15 @@ export class AuthService extends IAuthService {
     this.user$ = this.afAuth.authState;
   }
 
-  login(): void {
+  login(): Promise<void> {
     let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '';
     localStorage.setItem('returnUrl', returnUrl);
     
-    this.afAuth.auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
+    return this.afAuth.auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
   }
 
-  logout(): void {
-    this.afAuth.auth.signOut();
+  logout(): Promise<void> {
+    return this.afAuth.auth.signOut();
   }
 
   get appUser$(): Observable<AppUser> {
