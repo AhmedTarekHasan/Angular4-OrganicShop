@@ -32,7 +32,7 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     });
 
     let productId = this.route.snapshot.paramMap.get('id');
-debugger;
+
     if(productId) {
       this.displayMode = DisplayMode.Edit;
 
@@ -43,7 +43,7 @@ debugger;
   }
 
   public categories: Category[];
-  public productToEdit: Product;
+  public productToEdit: Product = <Product>{};
 
   public form: FormGroup = new FormGroup({
     'title': new FormControl(
@@ -124,7 +124,21 @@ debugger;
 
   public save() {
     if(this.form.valid) {
-      this.productService.create(this.form.value).then(value => {
+      if(this.displayMode === DisplayMode.Add) {
+        this.productService.create(this.productToEdit).then(value => {
+          this.router.navigate(['/admin/products']);
+        });
+      } else {
+        this.productService.update(this.productToEdit).then(value => {
+          this.router.navigate(['/admin/products']);
+        });
+      }
+    }
+  }
+
+  public delete() {
+    if(confirm('Are you sure you want to delete this product?')) {
+      this.productService.delete(this.productToEdit).then(value => {
         this.router.navigate(['/admin/products']);
       });
     }
@@ -144,8 +158,8 @@ debugger;
   }
 
   ngOnDestroy() {
-    this.categoriesSubscription.unsubscribe();
-    this.productSubscription.unsubscribe();
+    if(this.categoriesSubscription) this.categoriesSubscription.unsubscribe();
+    if(this.productSubscription) this.productSubscription.unsubscribe();
   }
 
 }

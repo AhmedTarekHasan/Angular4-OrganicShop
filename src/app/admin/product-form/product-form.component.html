@@ -44,7 +44,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="imageUrl">Image Url</label>
+        <label for="imageUrl">Image URL</label>
         <input
           [(ngModel)]="productToEdit.imageUrl"
           formControlName="imageUrl"
@@ -58,16 +58,25 @@
       <button
         [disabled]="title.pending || !form.valid"
         class="btn btn-primary"
-        (click)="save()">Save
+        (click)="save()">
+        <ng-container *ngIf="displayMode === 0">Create</ng-container>
+        <ng-container *ngIf="displayMode === 1">Update</ng-container>
+      </button>
+      <button
+        class="btn btn-danger"
+        type="button"
+        (click)="delete()">
+        <ng-container *ngIf="displayMode === 0">Cancel</ng-container>
+        <ng-container *ngIf="displayMode === 1">Delete</ng-container>
       </button>
     </form>
   </div>
   <div class="col-md-6">
     <div class="card" style="width: 18rem;">
-      <img class="card-img-top" [src]="imageUrl.value">
+      <img class="card-img-top" [src]="productToEdit.imageUrl" *ngIf="productToEdit.imageUrl">
       <div class="card-body">
-        <h5 class="card-title">{{ title.value }}</h5>
-        <p class="card-text">{{ price.value | currency:'USD':true }}</p>
+        <h5 class="card-title">{{ productToEdit.title }}</h5>
+        <p class="card-text">{{ productToEdit.price | currency:'USD':true }}</p>
       </div>
     </div>
   </div>

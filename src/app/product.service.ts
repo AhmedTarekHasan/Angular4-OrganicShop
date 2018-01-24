@@ -18,6 +18,14 @@ export class ProductService extends IProductService {
     return this.db.list('/products').push(product);
   }
 
+  delete(product: Product) {
+    return this.db.object('/products/' + product.id).remove();
+  }
+
+  update(product: Product) {
+    return this.db.object('/products/' + product.id).update(product);
+  }
+
   getAll(): Observable<Product[]> {
     return (this.db.list('/products')).snapshotChanges().map((a: any[]) => {
       return a.map(prod => {

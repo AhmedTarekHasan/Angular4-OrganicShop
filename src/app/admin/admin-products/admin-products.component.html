@@ -1,22 +1,92 @@
 <p>
     <a routerLink="/admin/products/new" class="btn btn-primary">New Product</a>
 </p>
+<p>
+    <input
+        #query
+        [(ngModel)]="filteringQuery"
+        (keyup)="filter(query.value)"
+        type="text"
+        class="form-control"
+        placeholder="Search...">
+</p>
 
-<table class="table">
+<data-table
+    [items]="items"
+    [itemCount]="itemsCount"
+    (reload)="reloadItems($event)">
+    <data-table-column
+        [property]="'title'"
+        [header]="'Title'"
+        [sortable]="true"
+        [resizable]="true">
+    </data-table-column>
+    <data-table-column
+        [property]="'price'"
+        [header]="'Price'"
+        [sortable]="true"
+        [resizable]="true">
+        <ng-template #dataTableCell let-item="item">
+            {{ item.price | currency:'USD':true }}
+        </ng-template>
+    </data-table-column>
+    <data-table-column
+        [property]="'id'">
+        <ng-template #dataTableCell let-item="item">
+            <a [routerLink]="['/admin/products/', item.id]">Edit</a>
+        </ng-template>
+    </data-table-column>
+    <data-table-column
+        [property]="'id'">
+        <ng-template #dataTableCell let-item="item">
+            <a (click)="delete(item)" href="javascript:void(0);">Delete</a>
+        </ng-template>
+    </data-table-column>
+</data-table>
+
+<!-- <table class="table">
     <thead>
         <tr>
-            <th>Title</th>
-            <th>Price</th>
+            <th>
+                <span (click)="setSorting('title')">
+                    <span
+                        *ngIf="sortProperty === 'title'"
+                        class="fa"
+                        [class.fa-arrow-up]="sortDirection === 'Ascending'"
+                        [class.fa-arrow-down]="sortDirection === 'Descending'"
+                        size='3'
+                        aria-hidden="true">
+                    </span>
+                    &nbsp;Title
+                </span>
+            </th>
+            <th>
+                <span (click)="setSorting('price')">
+                    <i
+                        *ngIf="sortProperty === 'price'"
+                        class="fa"
+                        [class.fa-arrow-up]="sortDirection === 'Ascending'"
+                        [class.fa-arrow-down]="sortDirection === 'Descending'"
+                        size='3'
+                        aria-hidden="true">
+                    </i>
+                    &nbsp;Price
+                </span>
+            </th>
+            <th></th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let product of products">
+        <tr *ngFor="let product of filteredProducts">
             <td>{{ product.title }}</td>
             <td>{{ product.price }}</td>
             <td>
                 <a [routerLink]="['/admin/products/', product.id]">Edit</a>
             </td>
+            <td>
+                <a (click)="delete(product)" href="javascript:void(0);">Delete</a>
+            </td>
         </tr>
     </tbody>
-</table>
+</table> -->
