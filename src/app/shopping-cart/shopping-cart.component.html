@@ -10,41 +10,46 @@
   <table class="table">
     <thead>
       <tr>
-        <th>Product</th>
-        <th>Quantity</th>
-        <th>Price Per Item</th>
-        <th>Total Price</th>
+        <th></th>
+        <th class="text-left">Product</th>
+        <th class="text-center" style="width: 200px;">Quantity</th>
+        <th class="text-center">Price/Item</th>
+        <th class="text-right">Items Price</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let record of report.records">
         <td>
+          <div [style.backgroundImage]="'url(' + record.product.imageUrl + ')'" class="thumbnail"></div>
+        </td>
+        <td class="text-left">
           {{ record.product.title }}
         </td>
-        <td>
-          <!-- {{ record.productItemsCount }} -->
+        <td class="text-center" style="width: 200px;">
           <app-shopping-cart-items-controller
             [count]="record.productItemsCount"
             (add)="onProductItemAdded(record.product)"
             (remove)="onProductItemRemoved(record.product)">
           </app-shopping-cart-items-controller>
         </td>
-        <td>
+        <td class="text-center">
           {{ record.product.price | currency:'USD':true }}
         </td>
-        <td>
+        <td class="text-right">
           {{ record.totalPrice | currency:'USD':true }}
         </td>
       </tr>
       <tr>
-        <th colspan="3" class="text-center">
+        <th colspan="4" class="text-center">
           Total Price
         </th>
-        <th>
+        <th class="text-right">
           {{ report.totalPrice | currency:'USD':true }}
         </th>
       </tr>
     </tbody>
   </table>
   <button class="btn btn-danger" (click)="clearShoppingCart()">Clear Shopping Cart</button>
+  <br/>
+  <br/>
 </ng-template>

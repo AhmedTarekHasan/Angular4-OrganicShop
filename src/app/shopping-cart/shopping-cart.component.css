@@ -1,0 +1,6 @@
+.thumbnail {
+    width: 90px;
+    height: 90px;
+    border-radius: 100%;
+    background-size: cover;
+}

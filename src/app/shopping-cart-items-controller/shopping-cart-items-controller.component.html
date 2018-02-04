@@ -14,24 +14,24 @@
 </ng-template>
 
 <ng-template #withItems>
-  <div class="row">
-      <div class="col-3">
+  <div class="row no-gutters">
+      <div class="col-3 text-left">
         <button
-          class="btn btn-primary btn-block"
+          class="btn btn-primary"
           [disabled]="!canAdd"
           (click)="addItem()">
-          +
+          <div class="fa fa-plus"></div>
         </button>
       </div>
       <div class="col text-center">
         {{ count }} in cart
       </div>
-      <div class="col-3">
+      <div class="col-3 text-right">
         <button
-          class="btn btn-primary btn-block"
+          class="btn btn-primary"
           [disabled]="!canRemoveItem"
           (click)="removeItem()">
-          -
+          <div class="fa fa-minus"></div>
         </button>
       </div>
   </div>
