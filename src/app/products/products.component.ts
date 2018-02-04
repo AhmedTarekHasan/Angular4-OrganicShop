@@ -1,10 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IProductService } from '../models/abstractions/product-service';
-import { Subscription } from 'rxjs/Subscription';
 import { Product } from '../models/product';
-import { ICategoryService } from '../models/abstractions/category-service';
+import { Subscription } from 'rxjs/Subscription';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Category } from '../models/category';
-import { ActivatedRoute } from '@angular/router';
+import { IShoppingCartService } from '../models/abstractions/shopping-cart-service';
+import { ShoppingCartReport, ProductPurchaseRecord } from '../models/abstractions/shopping-cart';
+import { LiteEventHandler } from '../shared/lite-event';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-products',
@@ -13,63 +16,101 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ProductsComponent implements OnInit, OnDestroy {
   private productsSubscription: Subscription;
-  private categoriesSubscription: Subscription;
+  private onItemAddedHandler: LiteEventHandler<Product>;
+  private onItemRemovedHandler: LiteEventHandler<Product>;
+  private onItemsClearedHandler: LiteEventHandler<void>;
+  private shoppingCartService: IShoppingCartService;
+  
+  public productPurchaseRecords: ProductPurchaseRecord[] = [];
+  public filteredProductPurchaseRecords: ProductPurchaseRecord[] = [];
+  public selectedCategoryId: string = '-1';
 
   constructor(private productService: IProductService,
-    private categoryService: ICategoryService,
+    private router: Router,
     private route: ActivatedRoute) {
-    this.categoriesSubscription = this.categoryService.getAll().subscribe((categories: Category[]) => {
-      if(categories && categories.length > 0) {
-        this.categories = categories;
+      this.shoppingCartService = AppComponent.globalShoppingCartService;
 
-        this.productsSubscription = this.productService.getAll().subscribe((products: Product[]) => {
-          this.products = products.sort((a: Product, b: Product) => {
-            let result = 0;
-            const left = a.title;
-            const right = b.title;
-      
-            if(left > right) {
-              result = 1;
-            } else if(left < right) {
-              result = -1;
-            }
-      
-            return result;
-          });
-          
-          this.filterByCategory(this.selectedCategory);
+      this.productsSubscription = this.productService.getAll().subscribe((products: Product[]) => {
+        this.productPurchaseRecords = products.sort(this.sortProducts).map((value, index, array) => {
+          let productPurchaseRecord = new  ProductPurchaseRecord();
+          productPurchaseRecord.product = value;
+          productPurchaseRecord.productItemsCount = this.getProductItemsCount(value);
+          return productPurchaseRecord;
         });
 
         this.route.queryParamMap.subscribe(params => {
           if(params.get('category')) {
-            this.selectedCategory = this.categories.find((cat, index, arr) => {
-              return cat.id === params.get('category');
-            }); 
+            this.selectedCategoryId = params.get('category');
+            this.filterByCategoryId(params.get('category'));
           } else {
-            this.selectedCategory = null;
+            this.selectedCategoryId = '-1';
+            this.filterByCategoryId("-1");
           }
-
-          this.filterByCategory(this.selectedCategory);
         });
-      }
-    });
+      });
+
+      this.onItemAddedHandler = this.shoppingCartService.itemAdded.on((product: Product) => {
+        let foundProduct = this.productPurchaseRecords.find((value, index, arr) => {
+          return value.product === product;
+        });
+
+        if(foundProduct) {
+          foundProduct.productItemsCount++;
+        }
+      });
+
+      this.onItemRemovedHandler = this.shoppingCartService.itemRemoved.on((product: Product) => {
+        let foundProduct = this.productPurchaseRecords.find((value, index, arr) => {
+          return value.product === product;
+        });
+
+        if(foundProduct) {
+          foundProduct.productItemsCount--;
+        }
+      });
+
+      this.onItemsClearedHandler = this.shoppingCartService.itemsCleared.on(() => {
+        this.productPurchaseRecords.forEach((value, index, array) => {
+          value.productItemsCount = 0;
+        });
+      });
   }
 
-  public products: Product[] = [];
-  public filteredProducts: Product[] = [];
-  public categories: Category[] = [];
-  public selectedCategory: Category;
-
-  public filterByCategory(category: Category): void {
-    this.selectedCategory = category;
-
-    if(this.selectedCategory) {
-      this.filteredProducts = this.products.filter((product, index, arr) => {
-        return product.categoryId === category.id;
+  public filterByCategoryId(categoryId: string): void {
+    if(categoryId != "-1") {
+      this.filteredProductPurchaseRecords = this.productPurchaseRecords.filter((productPurchaseRecord, index, arr) => {
+        return productPurchaseRecord.product.categoryId === categoryId;
       });
     } else {
-      this.filteredProducts = this.products;
+      this.filteredProductPurchaseRecords = this.productPurchaseRecords;
     }
+  }
+  public onSelectedCategoryIdChanged(categoryId: string) {
+    this.selectedCategoryId = categoryId;
+    this.router.navigate(['/'], { queryParams: { 'category': categoryId } });
+  }
+  public onProductItemAdded(product: Product): void {
+    this.shoppingCartService.addProductItem(product);
+  }
+  public onProductItemRemoved(product: Product): void {
+    this.shoppingCartService.removeProductItem(product);
+  }
+  public getProductItemsCount(product: Product): number {
+    return this.shoppingCartService.getProductItemsCount(product);
+  }
+
+  private sortProducts(a: Product, b: Product): number {
+    let result = 0;
+    const left = a.title;
+    const right = b.title;
+
+    if(left > right) {
+      result = 1;
+    } else if(left < right) {
+      result = -1;
+    }
+
+    return result;
   }
 
   ngOnInit() {
@@ -77,7 +118,9 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     if(this.productsSubscription) this.productsSubscription.unsubscribe();
-    if(this.categoriesSubscription) this.categoriesSubscription.unsubscribe();
+    if(this.onItemAddedHandler) this.onItemAddedHandler.off();
+    if(this.onItemRemovedHandler) this.onItemRemovedHandler.off();
+    if(this.onItemsClearedHandler) this.onItemsClearedHandler.off();
   }
 
 }

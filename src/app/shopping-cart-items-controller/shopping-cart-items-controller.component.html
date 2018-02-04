@@ -1,0 +1,38 @@
+<ng-container *ngIf="count > 0; then withItems else withNoItems"></ng-container>
+
+<ng-template #withNoItems>
+  <div class="row">
+      <div class="col">
+        <button
+          class="btn btn-primary btn-block"
+          [disabled]="!canAdd"
+          (click)="addItem()">
+          Add Item
+        </button>
+      </div>
+  </div>
+</ng-template>
+
+<ng-template #withItems>
+  <div class="row">
+      <div class="col-3">
+        <button
+          class="btn btn-primary btn-block"
+          [disabled]="!canAdd"
+          (click)="addItem()">
+          +
+        </button>
+      </div>
+      <div class="col text-center">
+        {{ count }} in cart
+      </div>
+      <div class="col-3">
+        <button
+          class="btn btn-primary btn-block"
+          [disabled]="!canRemoveItem"
+          (click)="removeItem()">
+          -
+        </button>
+      </div>
+  </div>
+</ng-template>

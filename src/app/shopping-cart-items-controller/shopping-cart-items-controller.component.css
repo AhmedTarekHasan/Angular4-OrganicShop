@@ -1,0 +1,8 @@
+.items-count {
+    vertical-align: middle;
+    text-align: center;
+    height: 100%;
+}
+button {
+    cursor: pointer;
+}

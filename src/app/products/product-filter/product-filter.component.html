@@ -1,0 +1,17 @@
+<div class="list-group">
+  <a
+    href="javascript:void(0)"
+    (click)="setSelectedCategoryId('-1')"
+    class="list-group-item list-group-item-action"
+    [class.active]="selectedCategoryId === '-1'">
+    All Categories
+  </a>
+  <a
+    href="javascript:void(0)"
+    *ngFor="let category of categories"
+    (click)="setSelectedCategoryId(category.id)"
+    class="list-group-item list-group-item-action"
+    [class.active]="category.id === selectedCategoryId">
+    {{ category.name }}
+  </a>
+</div>

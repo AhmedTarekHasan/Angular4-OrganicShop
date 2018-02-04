@@ -1,3 +1,50 @@
-<p>
-  shopping-cart works!
-</p>
+<h1>Shopping Cart</h1>
+<ng-container *ngIf="totalItemsCount > 0; then itemsFound else noItemsFound"></ng-container>
+
+<ng-template #noItemsFound>
+  <p>You don't have any items in your shopping cart</p>
+</ng-template>
+
+<ng-template #itemsFound>
+  <p>You have {{totalItemsCount}} items in your shopping cart</p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price Per Item</th>
+        <th>Total Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let record of report.records">
+        <td>
+          {{ record.product.title }}
+        </td>
+        <td>
+          <!-- {{ record.productItemsCount }} -->
+          <app-shopping-cart-items-controller
+            [count]="record.productItemsCount"
+            (add)="onProductItemAdded(record.product)"
+            (remove)="onProductItemRemoved(record.product)">
+          </app-shopping-cart-items-controller>
+        </td>
+        <td>
+          {{ record.product.price | currency:'USD':true }}
+        </td>
+        <td>
+          {{ record.totalPrice | currency:'USD':true }}
+        </td>
+      </tr>
+      <tr>
+        <th colspan="3" class="text-center">
+          Total Price
+        </th>
+        <th>
+          {{ report.totalPrice | currency:'USD':true }}
+        </th>
+      </tr>
+    </tbody>
+  </table>
+  <button class="btn btn-danger" (click)="clearShoppingCart()">Clear Shopping Cart</button>
+</ng-template>

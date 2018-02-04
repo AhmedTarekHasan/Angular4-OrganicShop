@@ -7,6 +7,29 @@ export function IsValidURL(str: string): boolean {
   return isWebUri(str);
 }
 
+export class ArrayUtilities {
+    public static remove<T>(array: T[], item: T): void {
+        if(array && array != null && array.length > 0) {
+            let index = array.findIndex((value, index, arr) => {
+                return value === item;
+            });
+
+            if(index > 0) {
+                array = array.slice(0, index).concat(array.slice(index + 1));
+            }
+        }
+    } 
+}
+
+export class Guid {
+    static newGuid() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            const r = Math.random() * 16 | 0, v = c === 'x' ? r : ( r & 0x3 | 0x8 );
+            return v.toString(16);
+        });
+    }
+}
+
 export class CustomValidators {
   constructor () {
   }

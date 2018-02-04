@@ -32,6 +32,15 @@ import { IProductService } from './models/abstractions/product-service';
 import { ICategoryService } from './models/abstractions/category-service';
 import { IUserService } from './models/abstractions/user-service';
 import { IAuthService } from './models/abstractions/auth-service';
+import { ProductFilterComponent } from './products/product-filter/product-filter.component';
+import { ProductCardComponent } from './product-card/product-card.component';
+import { ShoppingCartItemsControllerComponent } from './shopping-cart-items-controller/shopping-cart-items-controller.component';
+import { IShoppingCart } from './models/abstractions/shopping-cart';
+import { ShoppingCart } from './models/shopping-cart';
+import { IShoppingCartService } from './models/abstractions/shopping-cart-service';
+import { ShoppingCartService } from './shopping-cart.service';
+import { IStorage } from './models/abstractions/storage';
+import { LocalStorage } from './models/local-storage';
 
 @NgModule({
   declarations: [
@@ -46,7 +55,10 @@ import { IAuthService } from './models/abstractions/auth-service';
     AdminProductsComponent,
     AdminOrdersComponent,
     LoginComponent,
-    ProductFormComponent
+    ProductFormComponent,
+    ProductFilterComponent,
+    ProductCardComponent,
+    ShoppingCartItemsControllerComponent
   ],
   imports: [
     BrowserModule,
@@ -119,8 +131,11 @@ import { IAuthService } from './models/abstractions/auth-service';
     { provide: IAuthService, useClass: AuthService },
     { provide: IProductService, useClass: ProductService },
     { provide: ICategoryService, useClass: CategoryService },
-    { provide: IUserService, useClass: UserService }
-    ],
+    { provide: IUserService, useClass: UserService },
+    { provide: IStorage, useClass: LocalStorage },
+    { provide: IShoppingCart, useClass: ShoppingCart },
+    { provide: IShoppingCartService, useClass: ShoppingCartService }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

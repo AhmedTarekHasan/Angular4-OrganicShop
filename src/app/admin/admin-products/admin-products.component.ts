@@ -33,7 +33,7 @@ export class AdminProductsComponent implements OnInit, OnDestroy {
   //public sortProperty: SortProperty = SortProperty.title;
   //public sortDirection: SortDirection = SortDirection.Ascending;
 
-  private initializeTable(products: Product[]) {debugger;
+  private initializeTable(products: Product[]) {
     this.itemsCount = 0;
     this.tableResource = new DataTableResource<Product>(products);
     this.tableResource.query({ offset: 0, index: '1' }).then((items) => {

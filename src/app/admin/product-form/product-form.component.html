@@ -73,11 +73,7 @@
   </div>
   <div class="col-md-6">
     <div *ngIf="form.touched || form.dirty || !form.pristine" class="card" style="width: 18rem;">
-      <img class="card-img-top" [src]="productToEdit.imageUrl" *ngIf="productToEdit.imageUrl">
-      <div class="card-body">
-        <h5 class="card-title">{{ productToEdit.title }}</h5>
-        <p class="card-text">{{ productToEdit.price | currency:'USD':true }}</p>
-      </div>
+      <app-product-card [product]="productToEdit" [showActions]="false"></app-product-card>
     </div>
   </div>
 </div>
