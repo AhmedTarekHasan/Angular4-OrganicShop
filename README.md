@@ -4,10 +4,16 @@ This is the practice of a great course by the name [The Complete Angular Course:
 
 The course consists of 376 lectures in 29.5 hours playing time videos. It is a great course which I really recommend for those who want to learn Angular 2+, not only learn it, but also have advanced knowledge of it.
 
+<br/>
+
 This is the certificate I got after successfully completing the course.
+
+<br/>
 
 <p align="center">
   <img src="https://i.imgur.com/J9xfim8.jpg">
 </p>
+
+<br/>
 
 Good luck :)
