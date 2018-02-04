@@ -6,7 +6,7 @@ The course consists of 376 lectures in 29.5 hours playing time videos. It is a g
 
 <br/>
 
-This is the certificate I got after successfully completing the course.
+This is the [certificate](http://ude.my/UC-MZ1O24ER) I got after successfully completing the course.
 
 <br/>
 
