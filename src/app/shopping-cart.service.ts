@@ -5,6 +5,7 @@ import { Product } from './models/product';
 import { ShoppingCart } from './models/shopping-cart';
 import { ILiteEvent, LiteEvent } from './shared/lite-event';
 import { IStorage } from './models/abstractions/storage';
+import { Guid } from './shared/utilities';
 
 @Injectable()
 export class ShoppingCartService extends IShoppingCartService {

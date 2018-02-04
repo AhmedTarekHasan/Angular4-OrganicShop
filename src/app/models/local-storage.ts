@@ -2,7 +2,7 @@ import { IStorage } from "./abstractions/storage";
 
 export class LocalStorage extends IStorage {
     public get length(): number {
-        return localStorage.length;
+        return sessionStorage.length;
     }
     public clear(): void {
         localStorage.clear();
