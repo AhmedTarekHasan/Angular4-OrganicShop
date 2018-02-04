@@ -1,4 +1,4 @@
-# Angular4-OrganicShop
+# Angular 4 OrganicShop
 
 This is the practice of a great course by the name [The Complete Angular Course: Beginner to Advanced](https://www.udemy.com/the-complete-angular-master-class) authored by [Mosh Hamedani](https://programmingwithmosh.com/courses/).
 
